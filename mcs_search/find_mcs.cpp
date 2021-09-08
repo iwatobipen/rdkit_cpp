@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -42,7 +43,9 @@ void get_mcs(std::string pathName, unsigned int maxToDo,
 
 int main(int argc, char *argv[]) {
   std::vector<ROMOL_SPTR> mols;
-  get_mcs(argv[1], 10000, mols);
-
+  if (argc==3) {
+  get_mcs(argv[1], 10000, mols, argv[2]);
+  }
+  else {get_mcs(argv[1], 10000, mols);}
 }
 
