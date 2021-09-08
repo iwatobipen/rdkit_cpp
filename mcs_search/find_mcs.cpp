@@ -17,7 +17,7 @@
 using namespace RDKit;
 
 void get_mcs(std::string pathName, unsigned int maxToDo,
-              std::vector<ROMOL_SPTR> &mols) {
+              std::vector<ROMOL_SPTR> &mols, char* threshold="1.0") {
   RDKit::SDMolSupplier suppl(pathName, true, true, true);
   unsigned int nDone = 0;
   while (!suppl.atEnd() && (maxToDo <= 0 || nDone < maxToDo)) {
@@ -33,6 +33,9 @@ void get_mcs(std::string pathName, unsigned int maxToDo,
   }
   std::cerr << "read: " << nDone << " mols." << std::endl;
   MCSParameters p;
+  float f_threshold;
+  f_threshold = atof(threshold);
+  p.Threshold = f_threshold;
   MCSResult res = findMCS(mols, &p);
   std::cout << "\n"
                 << "MCS: " << res.SmartsString << " " << res.NumAtoms
