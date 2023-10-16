@@ -34,10 +34,20 @@ void gen_conf(std::string pathName,
     m->updatePropertyCache();
     // the tautomer hash code uses conjugation info
     MolOps::setConjugation(*m);
-    //RDKit::DGeomHelpers::EmbedMolecule(*m, 0, 1234, useExpTorsionAnglePrefs=true);
-    RDKit::DGeomHelpers::EmbedMolecule(*m, 0, 1234);
-    RDKit::MMFF::MMFFOptimizeMolecule(*m, 2000, "MMFF94s");
-    sdf_writer->write(*m);
+    std::shared_ptr<RDKit::ROMol> mh( RDKit::MolOps::addHs( *m ) );
+
+    //RDKit::DGeomHelpers::EmbedMolecule(*m, 100, 1234 );
+    RDKit::INT_VECT mol_cids = 
+        RDKit::DGeomHelpers::EmbedMultipleConfs(*mh, 10, 0 );
+    std::vector<std::pair<int, double>> res;
+    //RDKit::DGeomHelpers::EmbedMolecule(*m, 0, 1234);
+    //RDKit::MMFF::MMFFOptimizeMolecule(*m, 2000, "MMFF94s");
+    RDKit::MMFF::MMFFOptimizeMoleculeConfs(*mh, res, 0, 2000, "MMFF94s");
+    for (std::size_t confId=0, is = res.size(); confId < is; ++confId){
+      sdf_writer->write(*mh, confId);
+    }
+
+    //sdf_writer->write(*m);
     nDone += 1;
 
   }
