@@ -44,6 +44,7 @@ void gen_conf(std::string pathName,
     //RDKit::MMFF::MMFFOptimizeMolecule(*m, 2000, "MMFF94s");
     RDKit::MMFF::MMFFOptimizeMoleculeConfs(*mh, res, 0, 2000, "MMFF94s");
     for (std::size_t confId=0, is = res.size(); confId < is; ++confId){
+      mh->setProp("confId", confId);
       sdf_writer->write(*mh, confId);
     }
 
