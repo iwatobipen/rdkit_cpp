@@ -21,7 +21,9 @@ using namespace RDKit;
 void gen_conf(std::string pathName,
               std::string outName, 
               std::vector<ROMOL_SPTR> &mols) {
-  RDKit::SDMolSupplier suppl(pathName, true, true, true);
+  //RDKit::SDMolSupplier suppl(pathName, true, true, true);
+  RDKit::SmilesMolSupplier suppl(pathName, "\t", 0, 1, false);
+  
   bool takeOwnership = true;
   boost::shared_ptr<RDKit::SDWriter> sdf_writer( new RDKit::SDWriter( outName ) );
   
